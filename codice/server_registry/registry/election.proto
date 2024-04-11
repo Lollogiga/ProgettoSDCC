@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+option go_package = "codice/registry";
+
+package registry;
+
+service Registry {
+  rpc JoinNetwork (JoinRequest) returns (JoinReply) {}
+}
+
+message JoinRequest {
+  string addr = 1;
+}
+
+message JoinReply {
+  int32 id = 1;
+  repeated PeerInfo peer_list = 2;
+}
+
+service Update{
+  rpc UpdateNetwork (UpdateMessage) returns (UpdateResponse) {}
+}
+
+message UpdateMessage{
+  PeerInfo peer_list = 1;
+}
+
+message UpdateResponse{
+  string updateResponse = 1;
+}
+
+message PeerInfo {
+  int32 id = 1;
+  string addr = 2;
+}
+
+service Service{
+  rpc GetTime (TimeRequest) returns (TimeReply) {}
+}
+
+// The request message containing string TIME
+message TimeRequest {
+  string message = 1;
+}
+
+// The response message containing the server' time
+message TimeReply {
+  string message = 1;
+}
+
+service election{
+  rpc BullyElection (ElectionRequest) returns (ElectionReply);
+  rpc UpdateRegistry (IdLeader) returns (nil);
+}
+
+message nil{
+}
+
+message IdLeader{
+  int32 idLeader = 1;
+}
+
+message ElectionRequest{
+  string election = 1;
+  int32 electionId = 2;
+}
+
+message ElectionReply{
+  string electionReply = 1;
+}

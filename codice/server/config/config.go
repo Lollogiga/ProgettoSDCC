@@ -9,8 +9,8 @@ import (
 
 var ServerAddress string
 var MyAddress string
-var bullySelected bool
-var dolevSelected bool
+var BullySelected bool
+var DolevSelected bool
 
 // Struttura per memorizzare le informazioni del service registry
 type ServiceRegistry struct {
@@ -59,8 +59,8 @@ func DockerConfiguration() {
 	}
 	ServerAddress = configData.Docker.ServiceRegistry.Address + configData.Docker.ServiceRegistry.Port
 	MyAddress = configData.Docker.Peer.Address + configData.Docker.Peer.Port
-	bullySelected = configData.Docker.Algorithm.Bully
-	dolevSelected = configData.Docker.Algorithm.Dolev
+	BullySelected = configData.Docker.Algorithm.Bully
+	DolevSelected = configData.Docker.Algorithm.Dolev
 
 }
 
@@ -81,6 +81,6 @@ func LocalConfig() {
 	}
 	ServerAddress = configData.Localhost.ServiceRegistry.Address + configData.Localhost.ServiceRegistry.Port
 	log.Printf("%s", ServerAddress)
-	bullySelected = configData.Localhost.Algorithm.Bully
-	dolevSelected = configData.Localhost.Algorithm.Dolev
+	BullySelected = configData.Localhost.Algorithm.Bully
+	DolevSelected = configData.Localhost.Algorithm.Dolev
 }

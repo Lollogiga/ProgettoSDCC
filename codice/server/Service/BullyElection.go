@@ -42,7 +42,7 @@ func (s *Election) BullyElection(ctx context.Context, req *pb.ElectionRequest) (
 }
 
 func Bully() {
-	log.Printf("Avvio elezione\n")
+	log.Printf("Avvio elezione Bully\n")
 	for _, server := range shared.PeerList {
 		if server.Id > shared.MyId {
 			//Invio messaggio Election:

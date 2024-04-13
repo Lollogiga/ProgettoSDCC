@@ -5,8 +5,8 @@
             "port": ":50051"
           },
           "algorithm": {
-            "Bully": true,
-            "Dolev": false
+            "Bully": false,
+            "Dolev": true
           }
     },
     "docker": {

@@ -31,6 +31,8 @@ func main() {
 	localhostFlag := flag.Bool("localhost", false, "Indica se il programma sta eseguendo su localhost")
 	dockerFlag := flag.Bool("docker", false, "Indica se il programma sta eseguendo su Docker")
 	flag.Parse()
+
+	//Inizializzo il peer per eseguire in localhost / su docker
 	if *localhostFlag {
 		if flag.NArg() > 0 {
 			config.MyAddress = flag.Arg(0)
@@ -42,15 +44,18 @@ func main() {
 		//Verifico che l'indirizzo sia corretto:
 		api.VerifyAddress(config.MyAddress)
 
-		//Prendo le informazioni da il file config
+		//Prendo le informazioni dal file config.json
 		config.LocalConfig()
 
 	} else if *dockerFlag {
+		//Prendo le informazioni dal file config.json
 		config.DockerConfiguration()
 	} else {
-		fmt.Println("Devi specificare un flag: (-localHost) o (-docker)")
+		fmt.Println("Specificare un flag: (-localHost) o (-docker)")
 		return
 	}
+
+	//TODO gestire nel caso docker il ravvio automatico (creare un file in cui inserisco il mio ID)
 
 	//Mi connetto al serverRegistry:
 	conn, err := grpc.Dial(config.ServerAddress, grpc.WithInsecure())
@@ -84,8 +89,11 @@ func main() {
 
 	go startServer()
 
-	//service.Bully()
-	service.DolevStartElection()
+	if config.BullySelected == true {
+		service.Bully()
+	} else {
+		service.DolevStartElection()
+	}
 
 	//Implementazione funzionalità peer:
 	go api.GetTime(conn, err)

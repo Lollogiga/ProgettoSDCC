@@ -44,7 +44,7 @@ func (s *Election) DolevElection(ctx context.Context, req *pb.ElectionRequest) (
 
 // In tal caso io sto avviando una nuova elezione, mi genero un mio token.
 func DolevStartElection() {
-	log.Printf("Avvio Elezione\n")
+	log.Printf("Avvio Elezione Dolev\n")
 	shared.MyToken = int(shared.MyId)
 	Dolev()
 }

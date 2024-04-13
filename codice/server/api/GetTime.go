@@ -1,6 +1,7 @@
 package api
 
 import (
+	"codice/server/config"
 	"codice/server/registry"
 	"codice/server/service"
 	shared "codice/server/shared"
@@ -31,8 +32,11 @@ func GetTime(conn *grpc.ClientConn, err error) {
 				})
 				if leaderror != nil {
 					log.Printf("Leader unreachable: \n")
-					//service.Bully()
-					service.DolevStartElection()
+					if config.BullySelected == true {
+						service.Bully()
+					} else {
+						service.DolevStartElection()
+					}
 				} else {
 					log.Printf("Leader response: \nTime: %s", timeResp.Message)
 				}

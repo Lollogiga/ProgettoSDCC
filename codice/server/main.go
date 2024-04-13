@@ -2,15 +2,20 @@ package main
 
 import (
 	"codice/server/api"
+	"codice/server/config"
+	_ "codice/server/config"
 	_ "codice/server/registry"
 	pb "codice/server/registry" // Importa il pacchetto gRPC generato
 	"codice/server/service"
 	"codice/server/shared"
 	"context"
+	_ "encoding/json"
+	"flag"
+	"fmt"
+	_ "fmt"
 	"google.golang.org/grpc"
 	"log"
 	"net"
-	"os"
 )
 
 /*
@@ -22,18 +27,33 @@ func fileExists(filePath string) bool {
 
 func main() {
 
-	// Ottieni gli argomenti dalla riga di comando
-	args := os.Args[1:]
-	if len(args) != 1 {
-		log.Fatalf("Usage: go run main.go IP:port")
+	// Flag per il controllo dei casi localhost o docker
+	localhostFlag := flag.Bool("localhost", false, "Indica se il programma sta eseguendo su localhost")
+	dockerFlag := flag.Bool("docker", false, "Indica se il programma sta eseguendo su Docker")
+	flag.Parse()
+	if *localhostFlag {
+		if flag.NArg() > 0 {
+			config.MyAddress = flag.Arg(0)
+		} else {
+			fmt.Println("Usage: go run main.go -localhost IP:port")
+			return
+		}
+
+		//Verifico che l'indirizzo sia corretto:
+		api.VerifyAddress(config.MyAddress)
+
+		//Prendo le informazioni da il file config
+		config.LocalConfig()
+
+	} else if *dockerFlag {
+		config.DockerConfiguration()
+	} else {
+		fmt.Println("Devi specificare un flag: (-localHost) o (-docker)")
+		return
 	}
-	shared.Address = args[0]
 
-	//Verifico che l'indirizzo sia corretto:
-	api.VerifyAddress(shared.Address)
-
-	//Mi connetto al serverRegistry //TODO leggere da un file di configurazione
-	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	//Mi connetto al serverRegistry:
+	conn, err := grpc.Dial(config.ServerAddress, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("failed to connect to registry: %v", err)
 	}
@@ -42,7 +62,7 @@ func main() {
 	client := pb.NewRegistryClient(conn)
 
 	// Invia una richiesta di join al registry
-	resp, err := client.JoinNetwork(context.Background(), &pb.JoinRequest{Addr: shared.Address})
+	resp, err := client.JoinNetwork(context.Background(), &pb.JoinRequest{Addr: config.MyAddress})
 	if err != nil {
 		log.Fatalf("failed to join network: %v", err)
 	}
@@ -67,8 +87,6 @@ func main() {
 	//service.Bully()
 	service.DolevStartElection()
 
-	//Avvio procedura per tenere traccia degli aggiornamenti
-	//go RegisterService()
 	//Implementazione funzionalità peer:
 	go api.GetTime(conn, err)
 
@@ -78,7 +96,7 @@ func main() {
 
 func startServer() {
 	// Crea un listener TCP
-	lis, err := net.Listen("tcp", shared.Address)
+	lis, err := net.Listen("tcp", config.MyAddress)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}

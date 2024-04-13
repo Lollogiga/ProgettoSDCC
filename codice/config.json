@@ -2,25 +2,25 @@
     "localhost": {
         "service_registry": {
             "address": "localhost",
-            "port": ":50001"
+            "port": ":50051"
           },
           "algorithm": {
-            "Bully": "true",
-            "Dolev": "false"
+            "Bully": true,
+            "Dolev": false
           }
     },
     "docker": {
         "service_registry": {
             "address": "registry",
-            "port": ":50001"
+            "port": ":50051"
           },
           "peer": {
             "address": "peer",
             "port": ":50002"
           },
           "algorithm": {
-            "Bully": "true",
-            "Dolev": "false"
+            "Bully": true,
+            "Dolev": false
           }
     }
 }

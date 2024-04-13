@@ -2,9 +2,10 @@ package shared
 
 import "codice/server/registry"
 
+// Variabili di configurazione:
+
 var PeerList []registry.PeerInfo
 var Port int
-var Address string
 var MyId, LeaderId int32
 
 // variabili per algoritmo di Dolev-Klawe-Rodeh

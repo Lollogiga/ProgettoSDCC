@@ -651,12 +651,12 @@ var file_registry_election_proto_depIdxs = []int32{
 	4,  // 1: registry.UpdateMessage.peer_list:type_name -> registry.PeerInfo
 	0,  // 2: registry.Registry.JoinNetwork:input_type -> registry.JoinRequest
 	2,  // 3: registry.Update.UpdateNetwork:input_type -> registry.UpdateMessage
-	5,  // 4: registry.Service.GetTime:input_type -> registry.TimeRequest
+	5,  // 4: registry.service.GetTime:input_type -> registry.TimeRequest
 	9,  // 5: registry.election.BullyElection:input_type -> registry.ElectionRequest
 	8,  // 6: registry.election.UpdateRegistry:input_type -> registry.IdLeader
 	1,  // 7: registry.Registry.JoinNetwork:output_type -> registry.JoinReply
 	3,  // 8: registry.Update.UpdateNetwork:output_type -> registry.UpdateResponse
-	6,  // 9: registry.Service.GetTime:output_type -> registry.TimeReply
+	6,  // 9: registry.service.GetTime:output_type -> registry.TimeReply
 	10, // 10: registry.election.BullyElection:output_type -> registry.ElectionReply
 	7,  // 11: registry.election.UpdateRegistry:output_type -> registry.nil
 	7,  // [7:12] is the sub-list for method output_type

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net"
 	"os"
 )
 
@@ -58,10 +59,25 @@ func DockerConfiguration() {
 		return
 	}
 	ServerAddress = configData.Docker.ServiceRegistry.Address + configData.Docker.ServiceRegistry.Port
-	MyAddress = configData.Docker.Peer.Address + configData.Docker.Peer.Port
+	//MyAddress = configData.Docker.Peer.Address + configData.Docker.Peer.Port
 	BullySelected = configData.Docker.Algorithm.Bully
 	DolevSelected = configData.Docker.Algorithm.Dolev
 
+	hostname := "peer" // Sostituisci con il nome host desiderato
+
+	// Risolvi il nome host in un indirizzo IP
+	addrs, err := net.LookupHost(hostname)
+	if err != nil {
+		fmt.Printf("Errore durante la risoluzione dell'indirizzo IP per %s: %v\n", hostname, err)
+		return
+	}
+
+	// Utilizza il primo indirizzo IP risolto
+	ip := addrs[0]
+
+	// Stampa l'indirizzo IP
+	fmt.Printf("Indirizzo IP per %s: %s\n", hostname, ip)
+	MyAddress = ip + configData.Docker.Peer.Port
 }
 
 func LocalConfig() {

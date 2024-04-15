@@ -190,7 +190,7 @@ var Update_ServiceDesc = grpc.ServiceDesc{
 	Metadata: "registry/election.proto",
 }
 
-// ServiceClient is the client API for Service service.
+// ServiceClient is the client API for service service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
@@ -207,14 +207,14 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 
 func (c *serviceClient) GetTime(ctx context.Context, in *TimeRequest, opts ...grpc.CallOption) (*TimeReply, error) {
 	out := new(TimeReply)
-	err := c.cc.Invoke(ctx, "/registry.Service/GetTime", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/registry.service/GetTime", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ServiceServer is the server API for Service service.
+// ServiceServer is the server API for service service.
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
 type ServiceServer interface {
@@ -252,7 +252,7 @@ func _Service_GetTime_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/registry.Service/GetTime",
+		FullMethod: "/registry.service/GetTime",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ServiceServer).GetTime(ctx, req.(*TimeRequest))
@@ -260,11 +260,11 @@ func _Service_GetTime_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
-// Service_ServiceDesc is the grpc.ServiceDesc for Service service.
+// Service_ServiceDesc is the grpc.ServiceDesc for service service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Service_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "registry.Service",
+	ServiceName: "registry.service",
 	HandlerType: (*ServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

@@ -1,0 +1,17 @@
+# Usa una immagine di Go come base
+FROM golang:latest
+
+# Imposta la directory di lavoro all'interno del container
+WORKDIR /go/src/codice/server_registry
+
+# Copia il file di dipendenze del modulo e scarica le dipendenze
+
+COPY ./server_registry/go.mod ./
+COPY ./server_registry/go.sum ./
+RUN go mod download
+
+# Copia il codice sorgente nella directory di lavoro del container
+COPY ./server_registry ./
+
+# Comando predefinito per avviare il servizio server
+CMD ["sh", "-c", "go run ."]

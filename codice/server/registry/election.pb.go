@@ -674,13 +674,13 @@ var file_registry_election_proto_depIdxs = []int32{
 	4,  // 1: registry.UpdateMessage.peer_list:type_name -> registry.PeerInfo
 	0,  // 2: registry.Registry.JoinNetwork:input_type -> registry.JoinRequest
 	2,  // 3: registry.Update.UpdateNetwork:input_type -> registry.UpdateMessage
-	5,  // 4: registry.Service.GetTime:input_type -> registry.TimeRequest
+	5,  // 4: registry.service.GetTime:input_type -> registry.TimeRequest
 	9,  // 5: registry.election.BullyElection:input_type -> registry.ElectionRequest
 	8,  // 6: registry.election.UpdateRegistry:input_type -> registry.IdLeader
 	9,  // 7: registry.election.DolevElection:input_type -> registry.ElectionRequest
 	1,  // 8: registry.Registry.JoinNetwork:output_type -> registry.JoinReply
 	3,  // 9: registry.Update.UpdateNetwork:output_type -> registry.UpdateResponse
-	6,  // 10: registry.Service.GetTime:output_type -> registry.TimeReply
+	6,  // 10: registry.service.GetTime:output_type -> registry.TimeReply
 	10, // 11: registry.election.BullyElection:output_type -> registry.ElectionReply
 	7,  // 12: registry.election.UpdateRegistry:output_type -> registry.nil
 	10, // 13: registry.election.DolevElection:output_type -> registry.ElectionReply

@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  service_registry:
+    build:
+      context: .
+      dockerfile: DockerFileServerRegistry
+    hostname: registry
+    ports:
+      - "50051:50051"
+
+  peer:
+    build:
+      context: .
+      dockerfile: DockerFilePeer
+    hostname: peer
+    ports:
+      - ":50052"
+    depends_on:
+      - service_registry
+    links:
+      - service_registry
+    deploy:
+      replicas: 4

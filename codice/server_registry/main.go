@@ -19,62 +19,6 @@ var file *os.File
 var id = -1
 var PeerList []pb.PeerInfo
 
-// Gestiso l'ingresso di nuovi peer con una goRoutine
-/*func (s *registryServer) JoinNetwork(ctx context.Context, req *pb.JoinRequest) (*pb.JoinReply, error) {
-	// Crea un canale per comunicare il risultato della goroutine
-	resultChan := make(chan *pb.JoinReply)
-	defer close(resultChan) // Chiudi il canale quando la funzione termina
-
-	go func() {
-		//Ottengo dal messaggio Join Request l'indirizzo del client
-		address := req.Addr
-		log.Printf("New peer join the network: %s\n", address)
-
-		//Verifico se il Peer era già presente nella rete:
-		recoveryPeer := -1
-		for i := range s.PeerList {
-			if address == s.PeerList[i].Addr {
-				recoveryPeer = int(s.PeerList[i].Id)
-			}
-		}
-		if recoveryPeer != -1 {
-			// Prepara la risposta contenente l'ID generato e la lista aggiornata dei peer
-			reply := &pb.JoinReply{
-				Id:       int32(recoveryPeer),
-				PeerList: s.PeerList,
-			}
-			resultChan <- reply // Invia la risposta al canale
-			return
-		}
-		//Altrimenti è un nuovo peer:
-		id += 1
-		// Aggiungi il nuovo Peer alla lista dei Peer registrati
-		newPeer := &pb.PeerInfo{
-			Id:   int32(id),
-			Addr: address,
-		}
-		s.PeerList = append(s.PeerList, newPeer)
-
-		// Prepara la risposta contenente l'ID generato e la lista aggiornata dei peer
-		reply := &pb.JoinReply{
-			Id:       int32(id),
-			PeerList: s.PeerList,
-		}
-
-		//Informo tutti i Peer(tranne il nuovo arrivato) del nuovo peer
-		UpdatePeer(newPeer, s.PeerList)
-
-		//Aggiungo il nuovo Peer sul file yaml --> In questo modo ho un punto di recupero nel caso in cui il server registry dovesse crashare
-		s.addIntoYaml(newPeer)
-
-		resultChan <- reply // Invia la risposta al canale
-	}()
-
-	// Attendere il risultato dalla goroutine
-	reply := <-resultChan
-	return reply, nil
-}*/
-
 func (s *registryServer) JoinNetwork(ctx context.Context, req *pb.JoinRequest) (*pb.JoinReply, error) {
 
 	//Ottengo dal messaggio Join Request l'indirizzo del client

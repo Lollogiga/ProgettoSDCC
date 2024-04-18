@@ -10,6 +10,8 @@ service Registry {
 
 message JoinRequest {
   string addr = 1;
+  string recoveryString = 2;
+  int32 recoveryId = 3;
 }
 
 message JoinReply {
@@ -22,7 +24,8 @@ service Update{
 }
 
 message UpdateMessage{
-  PeerInfo peer_list = 1;
+  string UpdateString = 1;
+  PeerInfo peer_list = 2;
 }
 
 message UpdateResponse{

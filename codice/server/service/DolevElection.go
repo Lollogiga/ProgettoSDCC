@@ -12,7 +12,7 @@ import (
 
 func (s *Election) DolevElection(ctx context.Context, req *pb.ElectionRequest) (*pb.ElectionReply, error) {
 	//Quando ricevo un messaggio di elezione, può essere un messaggio di Token o di Election:
-	log.Printf("Message: %s", req.Election)
+	log.Printf("Dolev Message: %s", req.Election)
 	if req.Election == "Token" {
 		//Ricevo il token del peer che mi precede nel ring
 		messageOk := fmt.Sprint("OK")

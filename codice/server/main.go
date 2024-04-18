@@ -4,8 +4,9 @@ import (
 	"codice/server/api"
 	"codice/server/config"
 	_ "codice/server/config"
+	"codice/server/recovery"
 	_ "codice/server/registry"
-	pb "codice/server/registry" // Importa il pacchetto gRPC generato
+	pb "codice/server/registry"
 	"codice/server/service"
 	"codice/server/shared"
 	"context"
@@ -17,13 +18,6 @@ import (
 	"log"
 	"net"
 )
-
-/*
-
-func fileExists(filePath string) bool {
-	_, err := os.Stat(filePath)
-	return !os.IsNotExist(err)
-}*/
 
 func main() {
 
@@ -48,16 +42,25 @@ func main() {
 		config.LocalConfig()
 
 	} else if *dockerFlag {
+		log.Println("Docker environment")
 		//Prendo le informazioni dal file config.json
 		config.DockerConfiguration()
+
+		//Verifico l'esistenza del file: "Id.yaml" --> Se esiste sono in crash-recovery:
+		filePath := "recovery/Id.yaml"
+		if recovery.FileExists(filePath) {
+			log.Printf("I'm crash-recovery")
+			recovery.RecoveryString = "Recovery"
+			recovery.RecoveryId = recovery.GetId(filePath)
+		}
+
 	} else {
 		fmt.Println("Specificare un flag: (-localHost) o (-docker)")
 		return
 	}
 
-	//TODO gestire nel caso docker il ravvio automatico (creare un file in cui inserisco il mio ID)
-
-	//Mi connetto al serverRegistry:
+	//In tutti i casi mi connetto al server registry
+	log.Printf("The recoveryString is: %s, and the recoveryId %d", recovery.RecoveryString, recovery.RecoveryId)
 	conn, err := grpc.Dial(config.ServerAddress, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("failed to connect to registry: %v", err)
@@ -67,7 +70,7 @@ func main() {
 	client := pb.NewRegistryClient(conn)
 
 	// Invia una richiesta di join al registry
-	resp, err := client.JoinNetwork(context.Background(), &pb.JoinRequest{Addr: config.MyAddress})
+	resp, err := client.JoinNetwork(context.Background(), &pb.JoinRequest{Addr: config.MyAddress, RecoveryString: recovery.RecoveryString, RecoveryId: int32(recovery.RecoveryId)})
 	if err != nil {
 		log.Fatalf("failed to join network: %v", err)
 	}
@@ -86,6 +89,9 @@ func main() {
 		})
 		log.Printf("ID: %d, Addr: %s", server.GetId(), server.GetAddr())
 	}
+
+	//In tutti i casi creo un nuovo file in cui inserisco il mio id!
+	recovery.SaveId(shared.MyId)
 
 	go startServer()
 
@@ -135,12 +141,3 @@ func registerServices(server *grpc.Server) {
 	//TODO registrare i restanti servizi
 
 }
-
-/*func main() {
-filePath := "/percorso/del/tuo/file"
-if fileExists(filePath) {
-	fmt.Printf("Il file %s esiste.\n", filePath)
-} else {
-	fmt.Printf("Il file %s non esiste.\n", filePath)
-}
-*/

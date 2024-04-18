@@ -14,4 +14,4 @@ RUN go mod download
 COPY ./server_registry ./
 
 # Comando predefinito per avviare il servizio server
-CMD ["sh", "-c", "go run ."]
+CMD ["sh", "-c", "go run . -docker"]

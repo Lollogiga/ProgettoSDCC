@@ -4,16 +4,21 @@ import (
 	pb "codice/server_registry/registry"
 	"codice/server_registry/service"
 	"codice/server_registry/shared"
+	"flag"
 	"google.golang.org/grpc"
 	"log"
 	"net"
 	"os"
 )
 
-//var PeerList []pb.PeerInfo
-
 func main() {
-
+	// Flag per il controllo dei casi localhost o docker
+	shared.Localhostflag = flag.Bool("localhost", false, "Indica se il programma sta eseguendo su localhost")
+	shared.DockerFlag = flag.Bool("docker", false, "Indica se il programma sta eseguendo su Docker")
+	flag.Parse()
+	if !*shared.DockerFlag && !*shared.Localhostflag {
+		log.Fatalf("Use flag -localhost or -docker")
+	}
 	server := &service.RegistryServer{
 		PeerList: []*pb.PeerInfo{},
 	}
@@ -26,7 +31,7 @@ func main() {
 	pb.RegisterRegistryServer(s, server)
 	log.Println("Registry listening on port 50051")
 
-	shared.File, err = os.OpenFile("peerList/peerList.yaml", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
+	shared.File, err = os.OpenFile("peerList/PeerList.yaml", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
 	//file, err = os.OpenFile("peerList.yaml", os.O_RDWR, 0600)
 
 	if err != nil {

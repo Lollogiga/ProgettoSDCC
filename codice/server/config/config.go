@@ -59,7 +59,7 @@ func DockerConfiguration() {
 		return
 	}
 	ServerAddress = configData.Docker.ServiceRegistry.Address + configData.Docker.ServiceRegistry.Port
-	//MyAddress = configData.Docker.Peer.Address + configData.Docker.Peer.Port
+	//HostnameAddress = configData.Docker.Peer.Address + configData.Docker.Peer.Port
 	BullySelected = configData.Docker.Algorithm.Bully
 	DolevSelected = configData.Docker.Algorithm.Dolev
 

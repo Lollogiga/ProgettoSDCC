@@ -14,7 +14,7 @@ import (
 // Funzionalità peer che si occupa di Richiedere l'ora esatta
 func GetTime(conn *grpc.ClientConn, err error) {
 	for {
-		log.Printf("Request Time:\n")
+		log.Printf("Request Time at id: %d\n", shared.LeaderId)
 		time.Sleep(5000 * time.Millisecond)
 		for _, leader := range shared.PeerList {
 			if leader.Leader == true {

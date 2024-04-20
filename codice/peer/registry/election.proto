@@ -39,16 +39,11 @@ message PeerInfo {
 }
 
 service Service{
-  rpc GetTime (TimeRequest) returns (TimeReply) {}
+  rpc HeartBeat (HeartBeatMessage) returns (HeartBeatMessage) {}
 }
 
 // The request message containing string TIME
-message TimeRequest {
-  string message = 1;
-}
-
-// The response message containing the server' time
-message TimeReply {
+message HeartBeatMessage {
   string message = 1;
 }
 

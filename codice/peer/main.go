@@ -1,14 +1,14 @@
 package main
 
 import (
-	"codice/server/api"
-	"codice/server/config"
-	_ "codice/server/config"
-	"codice/server/recovery"
-	_ "codice/server/registry"
-	pb "codice/server/registry"
-	"codice/server/service"
-	"codice/server/shared"
+	"codice/peer/api"
+	"codice/peer/config"
+	_ "codice/peer/config"
+	"codice/peer/recovery"
+	_ "codice/peer/registry"
+	pb "codice/peer/registry"
+	"codice/peer/service"
+	"codice/peer/shared"
 	"context"
 	_ "encoding/json"
 	"flag"
@@ -59,7 +59,7 @@ func main() {
 		return
 	}
 
-	//In tutti i casi mi connetto al server registry
+	//In tutti i casi mi connetto al peer registry
 	log.Printf("The recoveryString is: %s, and the recoveryId %d", recovery.RecoveryString, recovery.RecoveryId)
 	conn, err := grpc.Dial(config.ServerAddress, grpc.WithInsecure())
 	if err != nil {
@@ -78,7 +78,7 @@ func main() {
 	//Estraggo risposta:
 	log.Printf("Received ID: %d\n", resp.GetId())
 	shared.MyId = resp.GetId()
-	log.Println("Received Server List:")
+	log.Println("Received Peer List:")
 
 	for _, server := range resp.GetPeerList() {
 		shared.NumNode++
@@ -90,8 +90,10 @@ func main() {
 		log.Printf("ID: %d, Addr: %s", server.GetId(), server.GetAddr())
 	}
 
-	//In tutti i casi creo un nuovo file in cui inserisco il mio id!
-	recovery.SaveId(shared.MyId)
+	//In tutti i casi creo un nuovo file in cui inserisco il mio id(Se sono su docker)
+	if *dockerFlag {
+		recovery.SaveId(shared.MyId)
+	}
 
 	go startServer()
 
@@ -102,9 +104,10 @@ func main() {
 	}
 
 	//Implementazione funzionalità peer:
-	go api.GetTime(conn, err)
+	go api.Heartbeat(conn, err)
 
 	for {
+
 	}
 }
 
@@ -115,13 +118,13 @@ func startServer() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	// Crea un nuovo server gRPC
+	// Crea un nuovo peer gRPC
 	grpcServer := grpc.NewServer()
 
-	// Registra i servizi sul server gRPC
+	// Registra i servizi sul peer gRPC
 	registerServices(grpcServer)
 
-	// Avvia il server gRPC per gestire le richieste
+	// Avvia il peer gRPC per gestire le richieste
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
@@ -129,8 +132,8 @@ func startServer() {
 
 func registerServices(server *grpc.Server) {
 	// Registra il servizio Time
-	timeService := &service.Time{}
-	pb.RegisterServiceServer(server, timeService)
+	HeartBeatService := &service.HeartBeat{}
+	pb.RegisterServiceServer(server, HeartBeatService)
 
 	UpdateService := &service.UpdateServer{}
 	pb.RegisterUpdateServer(server, UpdateService)

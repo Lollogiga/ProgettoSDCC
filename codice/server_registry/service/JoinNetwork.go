@@ -26,13 +26,13 @@ func (s *RegistryServer) JoinNetwork(ctx context.Context, req *registry.JoinRequ
 				recoveryPeer = int(s.PeerList[i].Id)
 			}
 		}
-		if recoveryPeer != 1 {
+		if recoveryPeer != -1 {
 			return s.sendResponse(int32(recoveryPeer))
 		}
 	} else if *shared.DockerFlag && req.RecoveryString == "Recovery" {
 		log.Printf("Peer with id: %d, is a recovery status", req.RecoveryId)
 
-		//Aggiorno l'address sul server e invio l'aggiornamento a tutti i peer:
+		//Aggiorno l'address sul peer e invio l'aggiornamento a tutti i peer:
 		recoverPeer := &registry.PeerInfo{
 			Id:   int32(req.RecoveryId),
 			Addr: peerAddress,
@@ -57,7 +57,7 @@ func (s *RegistryServer) JoinNetwork(ctx context.Context, req *registry.JoinRequ
 	//Informo tutti i Peer(tranne il nuovo arrivato) del nuovo peer
 	UpdatePeer(newPeer, s.PeerList, "newPeer")
 
-	//Aggiungo il nuovo Peer sul file yaml --> In questo modo ho un punto di recupero nel caso in cui il server registry dovesse crashare
+	//Aggiungo il nuovo Peer sul file yaml --> In questo modo ho un punto di recupero nel caso in cui il peer registry dovesse crashare
 	peerList.AddIntoYaml(newPeer)
 
 	// Attendere il risultato dalla goroutine
@@ -80,54 +80,3 @@ func (s *RegistryServer) sendResponse(id int32) (*pb.JoinReply, error) {
 	}
 	return reply, nil
 }
-
-/*func (s *RegistryServer) JoinNetwork(ctx context.Context, req *registry.JoinRequest) (*registry.JoinReply, error) {
-
-	//Ottengo dal messaggio Join Request l'indirizzo del client
-	address := req.Addr
-
-	log.Printf("New peer join the network: %s\n", address)
-
-	//Verifico se il Peer era già presente nella rete:
-	recoveryPeer := -1
-	for i := range s.PeerList {
-		if address == s.PeerList[i].Addr {
-			recoveryPeer = int(s.PeerList[i].Id)
-		}
-	}
-	if recoveryPeer != -1 {
-		// Prepara la risposta contenente l'ID generato e la lista aggiornata dei peer
-		reply := &registry.JoinReply{
-			Id:       int32(recoveryPeer),
-			PeerList: s.PeerList,
-		}
-		return reply, nil
-	}
-
-	//Altrimenti è un nuovo peer:
-	shared.Id += 1
-	// Aggiungi il nuovo Peer alla lista dei Peer registrati
-	newPeer := &registry.PeerInfo{
-		Id:   int32(shared.Id),
-		Addr: address,
-	}
-	s.PeerList = append(s.PeerList, newPeer)
-
-	// Prepara la risposta contenente l'ID generato e la lista aggiornata dei peer
-	reply := &registry.JoinReply{
-		Id:       int32(shared.Id),
-		PeerList: s.PeerList,
-	}
-
-	//Informo tutti i Peer(tranne il nuovo arrivato) del nuovo peer
-	UpdatePeer(newPeer, s.PeerList)
-
-	//Aggiungo il nuovo Peer sul file yaml --> In questo modo ho un punto di recupero nel caso in cui il server registry dovesse crashare
-	peerList.AddIntoYaml(newPeer)
-
-	// Attendere il risultato dalla goroutine
-	return reply, nil
-}
-
-
-*/

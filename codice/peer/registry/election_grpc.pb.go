@@ -194,7 +194,7 @@ var Update_ServiceDesc = grpc.ServiceDesc{
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
-	GetTime(ctx context.Context, in *TimeRequest, opts ...grpc.CallOption) (*TimeReply, error)
+	HeartBeat(ctx context.Context, in *HeartBeatMessage, opts ...grpc.CallOption) (*HeartBeatMessage, error)
 }
 
 type serviceClient struct {
@@ -205,9 +205,9 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 	return &serviceClient{cc}
 }
 
-func (c *serviceClient) GetTime(ctx context.Context, in *TimeRequest, opts ...grpc.CallOption) (*TimeReply, error) {
-	out := new(TimeReply)
-	err := c.cc.Invoke(ctx, "/registry.Service/GetTime", in, out, opts...)
+func (c *serviceClient) HeartBeat(ctx context.Context, in *HeartBeatMessage, opts ...grpc.CallOption) (*HeartBeatMessage, error) {
+	out := new(HeartBeatMessage)
+	err := c.cc.Invoke(ctx, "/registry.Service/HeartBeat", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -218,7 +218,7 @@ func (c *serviceClient) GetTime(ctx context.Context, in *TimeRequest, opts ...gr
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
 type ServiceServer interface {
-	GetTime(context.Context, *TimeRequest) (*TimeReply, error)
+	HeartBeat(context.Context, *HeartBeatMessage) (*HeartBeatMessage, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -226,8 +226,8 @@ type ServiceServer interface {
 type UnimplementedServiceServer struct {
 }
 
-func (UnimplementedServiceServer) GetTime(context.Context, *TimeRequest) (*TimeReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTime not implemented")
+func (UnimplementedServiceServer) HeartBeat(context.Context, *HeartBeatMessage) (*HeartBeatMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HeartBeat not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
 
@@ -242,20 +242,20 @@ func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
 	s.RegisterService(&Service_ServiceDesc, srv)
 }
 
-func _Service_GetTime_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TimeRequest)
+func _Service_HeartBeat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HeartBeatMessage)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).GetTime(ctx, in)
+		return srv.(ServiceServer).HeartBeat(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/registry.Service/GetTime",
+		FullMethod: "/registry.Service/HeartBeat",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).GetTime(ctx, req.(*TimeRequest))
+		return srv.(ServiceServer).HeartBeat(ctx, req.(*HeartBeatMessage))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -268,8 +268,8 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetTime",
-			Handler:    _Service_GetTime_Handler,
+			MethodName: "HeartBeat",
+			Handler:    _Service_HeartBeat_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

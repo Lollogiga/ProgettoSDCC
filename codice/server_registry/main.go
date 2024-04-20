@@ -19,6 +19,7 @@ func main() {
 	if !*shared.DockerFlag && !*shared.Localhostflag {
 		log.Fatalf("Use flag -localhost or -docker")
 	}
+
 	server := &service.RegistryServer{
 		PeerList: []*pb.PeerInfo{},
 	}

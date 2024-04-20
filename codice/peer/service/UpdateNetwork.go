@@ -1,8 +1,8 @@
 package service
 
 import (
-	pb "codice/server/registry"
-	"codice/server/shared"
+	pb "codice/peer/registry"
+	"codice/peer/shared"
 	"context"
 	"log"
 )

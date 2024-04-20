@@ -1,6 +1,6 @@
 package shared
 
-import "codice/server/registry"
+import "codice/peer/registry"
 
 // Variabili di configurazione:
 

@@ -8,14 +8,14 @@ WORKDIR /go/src/codice/server
 COPY ./config.json /go/src/codice
 
 # Copia il file di dipendenze del modulo e scarica le dipendenze
-COPY ./server/go.mod ./
-COPY ./server/go.sum ./
+COPY peer/go.mod ./
+COPY peer/go.sum ./
 RUN go mod download
 
 # Copia il codice sorgente nella directory di lavoro del container
-COPY ./server .
+COPY peer .
 
 
-# Comando predefinito per avviare il servizio server
+# Comando predefinito per avviare il servizio peer
 CMD ["sh", "-c", "go run . -docker"]
 

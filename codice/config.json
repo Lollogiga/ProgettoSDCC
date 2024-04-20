@@ -19,8 +19,8 @@
             "port": ":50002"
           },
           "algorithm": {
-            "Bully": false,
-            "Dolev": true
+            "Bully": true,
+            "Dolev": false
           }
     }
 }

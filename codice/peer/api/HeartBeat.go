@@ -1,20 +1,19 @@
 package api
 
 import (
-	"codice/server/config"
-	"codice/server/registry"
-	"codice/server/service"
-	shared "codice/server/shared"
+	"codice/peer/config"
+	"codice/peer/registry"
+	"codice/peer/service"
+	shared "codice/peer/shared"
 	"context"
 	"google.golang.org/grpc"
 	"log"
 	"time"
 )
 
-// Funzionalità peer che si occupa di Richiedere l'ora esatta
-func GetTime(conn *grpc.ClientConn, err error) {
+func Heartbeat(conn *grpc.ClientConn, err error) {
 	for {
-		log.Printf("Request Time at id: %d\n", shared.LeaderId)
+		log.Printf("Try to connect to leader(Id %d)\n", shared.LeaderId)
 		time.Sleep(5000 * time.Millisecond)
 		for _, leader := range shared.PeerList {
 			if leader.Leader == true {
@@ -27,9 +26,7 @@ func GetTime(conn *grpc.ClientConn, err error) {
 
 				peer := registry.NewServiceClient(conn)
 
-				timeResp, leaderror := peer.GetTime(context.Background(), &registry.TimeRequest{
-					Message: "TIME",
-				})
+				_, leaderror := peer.HeartBeat(context.Background(), &registry.HeartBeatMessage{Message: "HeartBeat"})
 				if leaderror != nil {
 					log.Printf("Leader unreachable: \n")
 					if config.BullySelected == true {
@@ -38,7 +35,7 @@ func GetTime(conn *grpc.ClientConn, err error) {
 						service.DolevStartElection()
 					}
 				} else {
-					log.Printf("Leader response: \nTime: %s", timeResp.Message)
+					log.Printf("The leader is alive\n")
 				}
 			}
 		}

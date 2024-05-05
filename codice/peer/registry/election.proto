@@ -51,6 +51,7 @@ service election{
   rpc BullyElection (ElectionRequest) returns (ElectionReply);
   rpc UpdateRegistry (IdLeader) returns (nil);
   rpc DolevElection (ElectionRequest) returns (ElectionReply);
+  rpc DKRElection(ElectionRequest) returns (ElectionReply);
 }
 
 message nil{
@@ -68,4 +69,5 @@ message ElectionRequest{
 
 message ElectionReply{
   string electionReply = 1;
+  int32 Id = 2;
 }

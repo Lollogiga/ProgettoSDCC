@@ -6,7 +6,7 @@
           },
           "algorithm": {
             "Bully": false,
-            "Dolev": true
+            "Dolev": false
           }
     },
     "docker": {

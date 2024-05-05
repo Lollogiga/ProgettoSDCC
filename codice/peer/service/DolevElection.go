@@ -58,7 +58,6 @@ func Dolev() {
 			//Se esiste un nodo che ha id maggiore del mio, invio il token al mio successivo nella rete:
 			for {
 				conn, err := grpc.Dial(shared.PeerList[int32(nextNode)].Addr, grpc.WithInsecure())
-				log.Printf("After Dial\n")
 				defer conn.Close()
 				if err != nil {
 					log.Printf("Peer Unreachble")

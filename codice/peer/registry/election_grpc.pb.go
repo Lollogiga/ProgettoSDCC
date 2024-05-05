@@ -283,6 +283,7 @@ type ElectionClient interface {
 	BullyElection(ctx context.Context, in *ElectionRequest, opts ...grpc.CallOption) (*ElectionReply, error)
 	UpdateRegistry(ctx context.Context, in *IdLeader, opts ...grpc.CallOption) (*Nil, error)
 	DolevElection(ctx context.Context, in *ElectionRequest, opts ...grpc.CallOption) (*ElectionReply, error)
+	DKRElection(ctx context.Context, in *ElectionRequest, opts ...grpc.CallOption) (*ElectionReply, error)
 }
 
 type electionClient struct {
@@ -320,6 +321,15 @@ func (c *electionClient) DolevElection(ctx context.Context, in *ElectionRequest,
 	return out, nil
 }
 
+func (c *electionClient) DKRElection(ctx context.Context, in *ElectionRequest, opts ...grpc.CallOption) (*ElectionReply, error) {
+	out := new(ElectionReply)
+	err := c.cc.Invoke(ctx, "/registry.election/DKRElection", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ElectionServer is the server API for Election service.
 // All implementations must embed UnimplementedElectionServer
 // for forward compatibility
@@ -327,6 +337,7 @@ type ElectionServer interface {
 	BullyElection(context.Context, *ElectionRequest) (*ElectionReply, error)
 	UpdateRegistry(context.Context, *IdLeader) (*Nil, error)
 	DolevElection(context.Context, *ElectionRequest) (*ElectionReply, error)
+	DKRElection(context.Context, *ElectionRequest) (*ElectionReply, error)
 	mustEmbedUnimplementedElectionServer()
 }
 
@@ -342,6 +353,9 @@ func (UnimplementedElectionServer) UpdateRegistry(context.Context, *IdLeader) (*
 }
 func (UnimplementedElectionServer) DolevElection(context.Context, *ElectionRequest) (*ElectionReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DolevElection not implemented")
+}
+func (UnimplementedElectionServer) DKRElection(context.Context, *ElectionRequest) (*ElectionReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DKRElection not implemented")
 }
 func (UnimplementedElectionServer) mustEmbedUnimplementedElectionServer() {}
 
@@ -410,6 +424,24 @@ func _Election_DolevElection_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Election_DKRElection_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ElectionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ElectionServer).DKRElection(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/registry.election/DKRElection",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ElectionServer).DKRElection(ctx, req.(*ElectionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Election_ServiceDesc is the grpc.ServiceDesc for Election service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -428,6 +460,10 @@ var Election_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DolevElection",
 			Handler:    _Election_DolevElection_Handler,
+		},
+		{
+			MethodName: "DKRElection",
+			Handler:    _Election_DKRElection_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

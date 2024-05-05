@@ -31,9 +31,12 @@ func Heartbeat(conn *grpc.ClientConn, err error) {
 					log.Printf("Leader unreachable: \n")
 					if config.BullySelected == true {
 						service.Bully()
-					} else {
+					} else if config.DolevSelected == true {
 						service.DolevStartElection()
+					} else {
+						service.DKR()
 					}
+
 				} else {
 					log.Printf("The leader is alive\n")
 				}

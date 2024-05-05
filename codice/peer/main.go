@@ -20,7 +20,6 @@ import (
 )
 
 func main() {
-
 	// Flag per il controllo dei casi localhost o docker
 	localhostFlag := flag.Bool("localhost", false, "Indica se il programma sta eseguendo su localhost")
 	dockerFlag := flag.Bool("docker", false, "Indica se il programma sta eseguendo su Docker")
@@ -99,8 +98,11 @@ func main() {
 
 	if config.BullySelected == true {
 		service.Bully()
-	} else {
+	} else if config.DolevSelected == true {
 		service.DolevStartElection()
+	} else {
+		shared.StimateLeader = shared.MyId
+		service.DKR()
 	}
 
 	//Implementazione funzionalità peer:

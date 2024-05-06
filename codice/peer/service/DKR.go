@@ -15,12 +15,13 @@ import (
 func (s *Election) DKRElection(ctx context.Context, req *pb.ElectionRequest) (*pb.ElectionReply, error) {
 	if req.Election == "Election" {
 		//Ho ricevuto dal mio predecessore un stimateLeader, lo confronto con il mio:
-		//Se l'id ricevuto, è maggiore del mio stimateLeader, aggiorno il mio EstimateLeader:
+		//Se sono nello stato di waiting e ricevo un valore pari al mio Id, devo divntare il leader
 		if shared.State == "waiting" && req.ElectionId == shared.MyId {
 			BecomeleaderDKR()
 			return nil, nil
 		}
 
+		//Se l'id ricevuto, è maggiore del mio stimateLeader, aggiorno il mio EstimateLeader:
 		if req.ElectionId > shared.MyId {
 			shared.StimateLeader = req.ElectionId
 			shared.State = "passive"

@@ -10,6 +10,12 @@ import (
 	"math"
 )
 
+/*
+	**README**
+Il seguente codice non riguarda parte del progetto di SDCC, è una varsione che precede lo sviluppo della funzione DKR.
+Tale algoritmo nasce da una iniziale incomprensione dell'algoritmo DKR, ma presenta, a parer mio, alcuni vantaggi rispetto ad esso, seppur da valutare le ipotesi di funzionamento.
+*/
+
 func (s *Election) DolevElection(ctx context.Context, req *pb.ElectionRequest) (*pb.ElectionReply, error) {
 	//Quando ricevo un messaggio di elezione, può essere un messaggio di Token o di Election:
 	log.Printf("Dolev Message: %s", req.Election)

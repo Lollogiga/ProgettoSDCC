@@ -55,7 +55,6 @@ func Bully() {
 
 			client := pb.NewElectionClient(conn)
 
-			//Invio la nuova entry al client
 			reply, err := client.BullyElection(context.Background(), &pb.ElectionRequest{
 				Election:   "Election",
 				ElectionId: shared.MyId,

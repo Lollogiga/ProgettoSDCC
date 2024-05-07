@@ -11,7 +11,7 @@ import (
 var ServerAddress string
 var MyAddress string
 var BullySelected bool
-var DolevSelected bool
+var DKRSelected bool
 
 // Struttura per memorizzare le informazioni del service registry
 type ServiceRegistry struct {
@@ -22,7 +22,7 @@ type ServiceRegistry struct {
 // Struttura per memorizzare le informazioni dell'algoritmo
 type Algorithm struct {
 	Bully bool `json:"Bully"`
-	Dolev bool `json:"Dolev"`
+	DKR   bool `json:"DKR"`
 }
 
 // Struttura per memorizzare le informazioni di ogni tipo di configurazione (localhost e docker)
@@ -61,7 +61,7 @@ func DockerConfiguration() {
 	ServerAddress = configData.Docker.ServiceRegistry.Address + configData.Docker.ServiceRegistry.Port
 	//HostnameAddress = configData.Docker.Peer.Address + configData.Docker.Peer.Port
 	BullySelected = configData.Docker.Algorithm.Bully
-	DolevSelected = configData.Docker.Algorithm.Dolev
+	DKRSelected = configData.Docker.Algorithm.DKR
 
 	hostname := "peer" // Sostituisci con il nome host desiderato
 
@@ -98,5 +98,5 @@ func LocalConfig() {
 	ServerAddress = configData.Localhost.ServiceRegistry.Address + configData.Localhost.ServiceRegistry.Port
 	log.Printf("%s", ServerAddress)
 	BullySelected = configData.Localhost.Algorithm.Bully
-	DolevSelected = configData.Localhost.Algorithm.Dolev
+	DKRSelected = configData.Localhost.Algorithm.DKR
 }

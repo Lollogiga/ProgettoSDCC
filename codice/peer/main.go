@@ -98,11 +98,12 @@ func main() {
 
 	if config.BullySelected == true {
 		service.Bully()
-	} else if config.DolevSelected == true {
-		service.DolevStartElection()
-	} else {
+	} else if config.DKRSelected == true {
 		shared.StimateLeader = shared.MyId
 		service.DKR()
+
+	} else {
+		service.DolevStartElection()
 	}
 
 	//Implementazione funzionalità peer:

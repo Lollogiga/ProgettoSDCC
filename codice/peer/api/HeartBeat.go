@@ -31,10 +31,10 @@ func Heartbeat(conn *grpc.ClientConn, err error) {
 					log.Printf("Leader unreachable: \n")
 					if config.BullySelected == true {
 						service.Bully()
-					} else if config.DolevSelected == true {
-						service.DolevStartElection()
-					} else {
+					} else if config.DKRSelected == true {
 						service.DKR()
+					} else {
+						service.DolevStartElection()
 					}
 
 				} else {

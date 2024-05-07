@@ -28,7 +28,7 @@ func (s *Election) BullyElection(ctx context.Context, req *pb.ElectionRequest) (
 		return reply, nil
 	}
 
-	//Altrimenti è un messaggio di update:
+	//Altrimenti è un messaggio di coordinator:
 	for i := range shared.PeerList {
 		if shared.PeerList[i].Id == req.ElectionId {
 			shared.PeerList[i].Leader = true
@@ -91,7 +91,7 @@ func Bully() {
 
 		//Invio la nuova entry al client
 		_, err = client.BullyElection(context.Background(), &pb.ElectionRequest{
-			Election:   "Update",
+			Election:   "Coordinator",
 			ElectionId: shared.MyId,
 		})
 	}

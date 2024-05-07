@@ -33,7 +33,7 @@ Per la scelta dell'algoritmo è necessario andare a settare i valori true e fals
 ```
 "algorithm": {
     "Bully": true,
-    "Dolev": false
+    "DKR": false
 }
 ```
 ## Esecuzione del codice senza istanza AWS:

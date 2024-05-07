@@ -63,7 +63,7 @@ func DKR() {
 
 		//Provo ad inviare la mia variabile EstimateLeader al successore:
 		client := pb.NewElectionClient(conn)
-		log.Printf("Sto per inviare la mia variabile leader: %d", shared.StimateLeader)
+		//log.Printf("Sto per inviare la mia variabile leader: %d", shared.StimateLeader)
 		_, err = client.DKRElection(context.Background(), &pb.ElectionRequest{
 			Election:   "Election",
 			ElectionId: shared.StimateLeader,

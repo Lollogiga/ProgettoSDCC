@@ -93,5 +93,8 @@ Al fine di verificare il corretto funzionamento sull'istanza EC2 è possibile:
     ```
   sudo docker restart <Container ID>
     ```
-
+* Rimozione di tutti i container nello stato "Exited":
+  ```
+  docker rm $(docker ps --filter status=exited -q)
+  ```
 

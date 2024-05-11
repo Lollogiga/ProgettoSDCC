@@ -76,7 +76,7 @@ ssh -i <path_to_PEM> ec2-user@<ip-EC2-instance>
     ```
 * Eseguo docker compose:
     ```
-    cd ProgettoSdcc/codice/
+    cd ProgettoSDCC/codice/
     sudo docker-compose -f compose.yaml up
     ```
 ## Verifica funzionamento programma:

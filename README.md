@@ -97,4 +97,7 @@ Al fine di verificare il corretto funzionamento sull'istanza EC2 è possibile:
   ```
   docker rm $(docker ps --filter status=exited -q)
   ```
-
+* Rimozione di tutte le immagini:
+  ```
+  sudo docker rmi $(sudo docker images -a -q)
+  ```

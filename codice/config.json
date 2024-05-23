@@ -19,8 +19,8 @@
             "port": ":50002"
           },
           "algorithm": {
-            "Bully": true,
-            "DKR": false
+            "Bully": false,
+            "DKR": true
           }
     }
 }
